@@ -9,6 +9,7 @@ datasets/
 lpips/
 upload/
 sample/
+inference/*
 __pycache__
 UVG/evaluation
 gen_evaluation
