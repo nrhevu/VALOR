@@ -1,4 +1,4 @@
-# [TPAMI2024] VALOR: Vision-Audio-Language Omni-Perception Pretraining Model and Dataset
+# VALOR: Vision-Audio-Language Omni-Perception Pretraining Model and Dataset
 
 <div align=center><img src=img/img_radar.png/ width="75%" height="75%"></div>
 
