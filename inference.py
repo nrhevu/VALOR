@@ -9,7 +9,7 @@ from easydict import EasyDict as edict
 import ipdb 
 from PIL import Image
 import torchaudio
-from test import get_model_attr
+from test_valor import get_model_attr
 import argparse
 from model.bert_tokenizer import BertTokenizer
 
@@ -22,6 +22,8 @@ parser.add_argument("--audio_path", default=None, type=str)
 parser.add_argument("--task", default=None, type=str)
 parser.add_argument("--question", default=None, type=str)
 parser.add_argument("--model_dir", default=None, type=str)
+parser.add_argument("--config", default=None, type=str)
+
 
 
 args = parser.parse_args()
@@ -102,7 +104,17 @@ def load_from_pretrained_dir(pretrain_dir):
 #pretrain_dir = '/public/chensihan/projects/VALOR/output/VALOR_base/caption-msrvtt-lr9e-6-bs64-epoch5-test10frame-0.05warmup-train6frame'
 
 
-checkpoint,pretrain_cfg = load_from_pretrained_dir(args.model_dir)
+# checkpoint,pretrain_cfg = load_from_pretrained_dir(args.model_dir)
+ckpt_file = args.model_dir
+checkpoint = torch.load(ckpt_file, map_location = 'cpu')
+checkpoint = {k.replace('module.',''):v for k,v in checkpoint.items()}
+
+pretrain_cfg = edict(json.load(open(args.config)))
+
+if  'video_frame_embedding' in checkpoint:
+    checkpoint['video_frame_embedding'][:,pretrain_cfg.video_sample_num:] = checkpoint['video_frame_embedding'][:,pretrain_cfg.video_sample_num-1].clone()
+if  'audio_frame_embedding' in checkpoint: 
+    checkpoint['audio_frame_embedding'][:,pretrain_cfg.audio_sample_num:] = checkpoint['audio_frame_embedding'][:,pretrain_cfg.audio_sample_num-1].clone()
 
 from model.pretrain import VALOR
 model = VALOR.from_pretrained(pretrain_cfg,checkpoint)

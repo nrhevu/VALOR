@@ -2,7 +2,7 @@ basedir=$1
 
 # msrvtt cap
 
-CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python -m torch.distributed.launch --nproc_per_node=8   --master_port 32711 ./train.py \
+CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node=2   --master_port 32711 ./train.py \
 --pretrain_dir $basedir \
 --config ./config/caption-msrvtt.json \
 --output_dir $basedir'/caption-msrvtt-lr9e-6-bs64-epoch5-test10frame-0.05warmup-train6frame'   \
@@ -11,6 +11,17 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python -m torch.distributed.launch --nproc_
 --warmup_ratio 0.05 \
 --train_video_sample_num 6 \
 --test_video_sample_num 10  \
+
+
+# CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2   --master_port 32711 ./train.py \
+# --pretrain_dir $basedir \
+# --config ./config/caption-msrvtt.json \
+# --output_dir $basedir'/caption-msrvtt-lr9e-6-bs64-epoch5-test10frame-0.05warmup-train6frame'   \
+# --learning_rate 9e-6  \
+# --save_best true \
+# --warmup_ratio 0.05 \
+# --train_video_sample_num 6 \
+# --test_video_sample_num 10  \
 
 # --zero_shot \
 # --checkpoint PATH/TO/CKPT
@@ -100,7 +111,8 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python -m torch.distributed.launch --nproc_
 # --pretrain_dir $basedir \
 # --config ./config/caption-mscoco.json \
 # --output_dir $basedir'/caption-mscoco-lr2.5e-6-bs64-epoch5-scst-plusbleu-392res'   \
-# --learning_rate 2.5e-6  \
+# --learning_rate 2.5e-6  \sh scripts/finetune_cap.sh $pretrain_path(output/VALOR_base)
+
 # --scst_finetuning true \
 # --video_resolution 392 \
 # --fp16 false \

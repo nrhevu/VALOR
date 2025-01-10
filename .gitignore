@@ -8,6 +8,7 @@ ouptut/
 datasets/
 lpips/
 upload/
+sample/
 __pycache__
 UVG/evaluation
 gen_evaluation
@@ -16,6 +17,7 @@ pretrained_weights
 __pycache__/
 *.py[cod]
 *$py.class
+*.mp4
 
 # C extensions
 *.so
